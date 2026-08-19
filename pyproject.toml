@@ -1,0 +1,21 @@
+[project]
+name = "class-schedule-ical"
+version = "0.1.0"
+description = "Generate an iCal calendar from YAML school schedules"
+readme = "README.md"
+authors = [
+    { name = "Max von Webel", email = "max@343max.de" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "icalendar>=7.2.2",
+    "jsonschema>=4.26.0",
+    "pyyaml>=6.0.3",
+]
+
+[project.scripts]
+class-schedule-ical = "class_schedule_ical.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"

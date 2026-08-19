@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/class-schedule-ical/schedule.schema.json",
+  "title": "School schedule",
+  "description": "A weekly school schedule with per-weekday time sections. Each weekday (Monday-Friday) must appear in exactly one time section.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["start", "end", "times", "days"],
+  "properties": {
+    "start": {
+      "type": "string",
+      "format": "date",
+      "title": "Start date",
+      "description": "First school day (inclusive)."
+    },
+    "end": {
+      "type": "string",
+      "format": "date",
+      "title": "End date",
+      "description": "Last school day (inclusive)."
+    },
+    "times": {
+      "type": "array",
+      "minItems": 1,
+      "title": "Time sections",
+      "description": "Time sections. Each weekday may appear in exactly one section.",
+      "items": { "$ref": "#/$defs/timeSection" }
+    },
+    "days": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "Classes per weekday",
+      "description": "Classes per weekday, mapped to time slots by position (one class per slot).",
+      "properties": {
+        "monday": { "$ref": "#/$defs/classes" },
+        "tuesday": { "$ref": "#/$defs/classes" },
+        "wednesday": { "$ref": "#/$defs/classes" },
+        "thursday": { "$ref": "#/$defs/classes" },
+        "friday": { "$ref": "#/$defs/classes" }
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "title": "Exceptions (non-school days)",
+      "description": "Full-day date ranges (inclusive) with no school, e.g. breaks or holidays.",
+      "items": { "$ref": "#/$defs/dateRange" }
+    }
+  },
+  "$defs": {
+    "weekday": {
+      "type": "string",
+      "enum": ["monday", "tuesday", "wednesday", "thursday", "friday"]
+    },
+    "time": {
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+      "description": "24-hour time in HH:MM format."
+    },
+    "slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "$ref": "#/$defs/time" },
+        "end": { "$ref": "#/$defs/time" }
+      }
+    },
+    "timeSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weekdays", "slots"],
+      "properties": {
+        "weekdays": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/weekday" }
+        },
+        "slots": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/slot" }
+        }
+      }
+    },
+    "class": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject"],
+      "properties": {
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Subject",
+          "description": "Class subject (shown as the event title)."
+        },
+        "room": {
+          "type": "string",
+          "title": "Room",
+          "description": "Room number or location. Omit for free periods."
+        }
+      }
+    },
+    "classes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/class" }
+    },
+    "dateRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date" },
+        "end": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

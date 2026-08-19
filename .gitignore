@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Generated output
+output/
+
+# macOS
+.DS_Store
+
+# Jujutsu local state (history lives in .git when co-located)
+.jj/
+
+# Pi agent local state
+.pi/
