@@ -27,6 +27,7 @@ as you type.
 ```sh
 uv run python -m class_schedule_ical            # generate output/calendar.ics
 uv run python -m class_schedule_ical --check    # validate only, write nothing
+uv run python -m class_schedule_ical --preview  # print the schedule to the terminal
 ```
 
 (Or `uv run class-schedule-ical` once the console script is installed.)

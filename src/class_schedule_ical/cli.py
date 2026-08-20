@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from .model import load_yaml, parse_config, parse_schedule
+from .preview import format_preview
 from .render import build_calendar
 from .validate import (
     validate_against_schema,
@@ -29,6 +30,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--schema", default="schema/schedule.schema.json", help="JSON Schema path")
     parser.add_argument(
         "--check", action="store_true", help="validate only, do not write output"
+    )
+    parser.add_argument(
+        "--preview",
+        action="store_true",
+        help="print a human-readable schedule preview (no .ics written)",
     )
     args = parser.parse_args(argv)
 
@@ -82,6 +88,10 @@ def main(argv: list[str] | None = None) -> int:
         for e in errors:
             print(f"Error: {e}", file=sys.stderr)
         return 1
+
+    if args.preview:
+        print(format_preview(schedules))
+        return 0
 
     if args.check:
         print(f"OK: {len(schedules)} schedule(s) valid")
