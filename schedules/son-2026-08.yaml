@@ -1,0 +1,54 @@
+# Class 5b — start of school year 2026/27
+start: 2026-08-17
+end: 2026-09-20
+
+times:
+  - weekdays: [monday]
+    slots:
+      - { start: "08:00", end: "09:30" }
+      - { start: "09:55", end: "10:40" }
+      - { start: "10:45", end: "12:15" }
+  - weekdays: [tuesday, thursday]
+    slots:
+      - { start: "08:00", end: "09:30" }
+      - { start: "09:55", end: "10:40" }
+      - { start: "10:45", end: "12:15" }
+      - { start: "12:55", end: "14:25" }
+  - weekdays: [wednesday]
+    slots:
+      - { start: "08:00", end: "09:30" }
+      - { start: "09:55", end: "10:40" }
+      - { start: "10:45", end: "11:30" }
+      - { start: "11:30", end: "12:15" }
+      - { start: "12:55", end: "14:25" }
+  - weekdays: [friday]
+    slots:
+      - { start: "09:55", end: "10:40" }
+      - { start: "10:45", end: "12:15" }
+      - { start: "12:55", end: "14:25" }
+
+days:
+  monday:
+    - { subject: NaWi, room: "A207" }
+    - { subject: "DAL 5b", room: "A309" }
+    - { subject: "ENR (NH)", room: "A313" }
+  tuesday:
+    - { subject: DE, room: "A309" }
+    - { subject: "DAL 5b", room: "A309" }
+    - { subject: Sport, room: "TH1" }
+    - { subject: MU, room: "A301" }
+  wednesday:
+    - { subject: "ENR (NH)", room: "A313" }
+    - { subject: "DAL 5b", room: "A309" }
+    - { subject: MA, room: "A309" }
+    - { subject: KStd, room: "A309" }
+    - { subject: Kunst, room: "A109" }
+  thursday:
+    - { subject: GeWi, room: "A309" }
+    - { subject: "DAL 5b", room: "A309" }
+    - { subject: MA, room: "A309" }
+    - { subject: E, room: "A309" }
+  friday:
+    - { subject: "DAL 5b", room: "A309" }
+    - { subject: E, room: "A309" }
+    - { subject: DE, room: "A309" }
