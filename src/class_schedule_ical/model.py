@@ -80,7 +80,12 @@ class Schedule:
     end: date
     times: tuple[TimeSection, ...]
     days: dict[str, tuple[ClassBlock, ...]]
-    exceptions: tuple[DateRange, ...] = ()
+
+
+@dataclass(frozen=True)
+class Holidays:
+    filename: str
+    exceptions: tuple[DateRange, ...]
 
 
 @dataclass(frozen=True)
@@ -122,6 +127,16 @@ def parse_schedule(data: dict[str, Any], filename: str) -> Schedule:
         )
         for weekday, classes in data["days"].items()
     }
+    return Schedule(
+        filename=filename,
+        start=date.fromisoformat(data["start"]),
+        end=date.fromisoformat(data["end"]),
+        times=times,
+        days=days,
+    )
+
+
+def parse_holidays(data: dict[str, Any], filename: str) -> Holidays:
     exceptions = tuple(
         DateRange(
             start=date.fromisoformat(r["start"]),
@@ -129,14 +144,7 @@ def parse_schedule(data: dict[str, Any], filename: str) -> Schedule:
         )
         for r in data.get("exceptions", [])
     )
-    return Schedule(
-        filename=filename,
-        start=date.fromisoformat(data["start"]),
-        end=date.fromisoformat(data["end"]),
-        times=times,
-        days=days,
-        exceptions=exceptions,
-    )
+    return Holidays(filename=filename, exceptions=exceptions)
 
 
 def slots_for_weekday(schedule: Schedule, weekday: str) -> list[Slot]:

@@ -7,7 +7,7 @@ from typing import Any
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import ValidationError
 
-from .model import WEEKDAYS, Schedule, slots_for_weekday
+from .model import WEEKDAYS, Holidays, Schedule, slots_for_weekday
 
 
 def validate_against_schema(data: dict[str, Any], schema: dict[str, Any]) -> list[str]:
@@ -80,23 +80,17 @@ def validate_schedule(schedule: Schedule) -> list[str]:
                 f"{p}: {wd} has {len(classes)} classes but {len(slots)} time slots (must match)"
             )
 
-    # Exception ranges must be well-formed.
-    for i, r in enumerate(schedule.exceptions):
-        if r.end < r.start:
-            errors.append(f"{p}: exceptions[{i}] end ({r.end}) is before start ({r.start})")
-
     return errors
 
 
-def validate_exception_warnings(schedule: Schedule) -> list[str]:
-    warnings: list[str] = []
-    for i, r in enumerate(schedule.exceptions):
-        if r.start < schedule.start or r.end > schedule.end:
-            warnings.append(
-                f"{schedule.filename}: exceptions[{i}] ({r.start}..{r.end}) extends outside "
-                f"the schedule range ({schedule.start}..{schedule.end})"
+def validate_holidays(holidays: Holidays) -> list[str]:
+    errors: list[str] = []
+    for i, r in enumerate(holidays.exceptions):
+        if r.end < r.start:
+            errors.append(
+                f"{holidays.filename}: exceptions[{i}] end ({r.end}) is before start ({r.start})"
             )
-    return warnings
+    return errors
 
 
 def validate_no_overlap(schedules: list[Schedule]) -> list[str]:

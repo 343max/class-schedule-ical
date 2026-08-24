@@ -1,5 +1,6 @@
 {
   "yaml.schemas": {
-    "./schema/schedule.schema.json": ["schedules/*.yaml", "schedules/*.yml"]
+    "./schema/schedule.schema.json": ["schedules/*.yaml", "schedules/*.yml"],
+    "./schema/holidays.schema.json": ["holidays/*.yaml", "holidays/*.yml"]
   }
 }

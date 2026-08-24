@@ -38,12 +38,6 @@
         "thursday": { "$ref": "#/$defs/classes" },
         "friday": { "$ref": "#/$defs/classes" }
       }
-    },
-    "exceptions": {
-      "type": "array",
-      "title": "Exceptions (non-school days)",
-      "description": "Full-day date ranges (inclusive) with no school, e.g. breaks or holidays.",
-      "items": { "$ref": "#/$defs/dateRange" }
     }
   },
   "$defs": {
@@ -105,15 +99,6 @@
       "type": "array",
       "minItems": 1,
       "items": { "$ref": "#/$defs/class" }
-    },
-    "dateRange": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["start", "end"],
-      "properties": {
-        "start": { "type": "string", "format": "date" },
-        "end": { "type": "string", "format": "date" }
-      }
     }
   }
 }

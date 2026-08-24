@@ -1,0 +1,13 @@
+# Berlin school holidays 2026/27 + study day
+exceptions:
+  - { start: "2026-10-06", end: "2026-10-06" }   # Studientag (no school)
+  - { start: "2026-10-19", end: "2026-10-31" }   # Herbstferien
+  - { start: "2026-12-23", end: "2027-01-02" }   # Weihnachtsferien
+  - { start: "2027-02-01", end: "2027-02-06" }   # Winterferien
+  - { start: "2027-03-08", end: "2027-03-08" }   # Frauentag (Feiertag)
+  - { start: "2027-03-22", end: "2027-04-02" }   # Osterferien
+  - { start: "2027-05-06", end: "2027-05-06" }   # Himmelfahrt (Feiertag)
+  - { start: "2027-05-07", end: "2027-05-07" }   # Unterrichtsfreier Tag
+  - { start: "2027-05-17", end: "2027-05-17" }   # Pfingstmontag (Feiertag)
+  - { start: "2027-05-18", end: "2027-05-19" }   # Pfingstferien
+  - { start: "2027-07-01", end: "2027-08-14" }   # Sommerferien

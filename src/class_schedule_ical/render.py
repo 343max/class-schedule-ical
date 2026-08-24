@@ -7,13 +7,22 @@ from zoneinfo import ZoneInfo
 
 from icalendar import Calendar, Event, Timezone, vRecur
 
-from .model import PY_WEEKDAY_TO_RFC, WEEKDAY_TO_RFC, Config, Schedule, slots_for_weekday
+from .model import (
+    PY_WEEKDAY_TO_RFC,
+    WEEKDAY_TO_RFC,
+    Config,
+    DateRange,
+    Schedule,
+    slots_for_weekday,
+)
 
 PRODID = "-//class-schedule-ical//EN"
 UID_DOMAIN = "class-schedule-ical"
 
 
-def build_calendar(config: Config, schedules: list[Schedule]) -> Calendar:
+def build_calendar(
+    config: Config, schedules: list[Schedule], exceptions: list[DateRange]
+) -> Calendar:
     tz = ZoneInfo(config.timezone)
 
     cal = Calendar()
@@ -23,12 +32,12 @@ def build_calendar(config: Config, schedules: list[Schedule]) -> Calendar:
     cal.add_component(Timezone.from_tzinfo(tz))
 
     for schedule in schedules:
-        _add_schedule(cal, schedule, tz)
+        _add_schedule(cal, schedule, tz, exceptions)
 
     return cal
 
 
-def _add_schedule(cal: Calendar, schedule: Schedule, tz) -> None:
+def _add_schedule(cal: Calendar, schedule: Schedule, tz, exceptions) -> None:
     for weekday, classes in schedule.days.items():
         slots = slots_for_weekday(schedule, weekday)
         rfc_day = WEEKDAY_TO_RFC[weekday]
@@ -46,7 +55,9 @@ def _add_schedule(cal: Calendar, schedule: Schedule, tz) -> None:
             until = _rrule_until(schedule.end, tz)
             ev.add("rrule", vRecur.from_ical(f"FREQ=WEEKLY;BYDAY={rfc_day};UNTIL={until}"))
 
-            for exc in _exception_dates(schedule, weekday, slot.start, tz):
+            for exc in _exception_dates(
+                exceptions, weekday, slot.start, schedule.start, schedule.end, tz
+            ):
                 ev.add("exdate", exc)
 
             cal.add_component(ev)
@@ -73,12 +84,20 @@ def _rrule_until(end: date, tz) -> str:
     return end_of_day.astimezone(dt_timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
-def _exception_dates(schedule: Schedule, weekday: str, start_time: time, tz):
-    """Yield EXDATE datetimes for exception days that fall on ``weekday``."""
+def _exception_dates(
+    exceptions: list[DateRange],
+    weekday: str,
+    start_time: time,
+    schedule_start: date,
+    schedule_end: date,
+    tz,
+):
+    """Yield EXDATE datetimes for exception days (within the schedule) on ``weekday``."""
     rfc_day = WEEKDAY_TO_RFC[weekday]
-    for r in schedule.exceptions:
-        d = r.start
-        while d <= r.end:
+    for r in exceptions:
+        d = max(r.start, schedule_start)
+        end = min(r.end, schedule_end)
+        while d <= end:
             if PY_WEEKDAY_TO_RFC.get(d.weekday()) == rfc_day:
                 yield datetime.combine(d, start_time, tzinfo=tz)
             d += timedelta(days=1)

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/class-schedule-ical/holidays.schema.json",
+  "title": "School holidays / non-school days",
+  "description": "Full-day date ranges (inclusive) with no school, e.g. breaks, public holidays, or study days.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["exceptions"],
+  "properties": {
+    "exceptions": {
+      "type": "array",
+      "title": "Exceptions (non-school days)",
+      "description": "Full-day date ranges (inclusive) with no school.",
+      "items": { "$ref": "#/$defs/dateRange" }
+    }
+  },
+  "$defs": {
+    "dateRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date" },
+        "end": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}
