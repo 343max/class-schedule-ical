@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>School Calendar</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; max-width: 680px; margin: 48px auto; padding: 0 24px; color: #1c1c1e; line-height: 1.55; }
+  h1 { font-size: 24px; }
+  .url, code { background: #f2f2f7; padding: 2px 6px; border-radius: 5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; word-break: break-all; }
+  .btn { display: inline-block; background: #007aff; color: #fff; text-decoration: none; padding: 11px 20px; border-radius: 9px; font-weight: 600; margin: 10px 0; }
+  .btn:hover { background: #0062cc; }
+  .note { color: #666; font-size: 14px; }
+  .section { margin-top: 26px; }
+  ul { padding-left: 20px; }
+</style>
+</head>
+<body>
+  <h1>School Calendar</h1>
+  <p>This calendar is generated automatically from the YAML schedules in the repository and republished on every push.</p>
+
+  <div class="section">
+    <a class="btn" href="webcal://343max.github.io/class-schedule-ical/calendar.ics">Subscribe</a>
+    <p class="note">or paste this URL into your calendar app:</p>
+    <p class="url">https://343max.github.io/class-schedule-ical/calendar.ics</p>
+  </div>
+
+  <div class="section">
+    <h2>How subscription works</h2>
+    <p>A calendar <em>subscription</em> points at the URL above. Your calendar app periodically re-downloads it and updates your events automatically — add a schedule, fix a room, or change a holiday, and the change shows up without re-importing anything.</p>
+    <ul>
+      <li><strong>Apple Calendar</strong>: File → New Calendar Subscription → paste the URL (or just click <em>Subscribe</em> above).</li>
+      <li><strong>Google Calendar</strong>: Settings → Add calendar → From URL → paste the <code>https://…</code> URL.</li>
+    </ul>
+    <p class="note">Note: calendar apps refresh subscriptions on their own schedule (Google can lag by up to a day), so changes are not instant.</p>
+  </div>
+
+  <p class="section"><a href="calendar.ics" download>Download calendar.ics</a></p>
+</body>
+</html>

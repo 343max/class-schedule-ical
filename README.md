@@ -57,6 +57,8 @@ schedules/                   # one YAML file per schedule (e.g. per term)
 holidays/                    # one YAML file per holiday set (e.g. per school year)
 schema/schedule.schema.json  # JSON Schema for schedules
 schema/holidays.schema.json  # JSON Schema for holidays
+publish/index.html           # GitHub Pages landing page (webcal links)
+.github/workflows/publish.yml # regenerates + publishes on every push
 output/calendar.ics          # generated (gitignored)
 ```
 
@@ -142,9 +144,18 @@ Enforced on every run (and in-editor via the schema):
   re-importing/subscribing updates events instead of duplicating them. Deleting a
   schedule file removes its events on the next run.
 
-## Subscribing
+## Publishing (GitHub Pages)
 
-Host `output/calendar.ics` on your server and add its URL as a calendar
-subscription in Google Calendar ("From URL") or Apple Calendar
-("New Calendar Subscription"). Note that URL-based subscriptions refresh on the
-provider's own schedule (which can lag by hours), so changes are not instant.
+A GitHub Action (`.github/workflows/publish.yml`) regenerates the calendar on
+every push to `main` and publishes it to GitHub Pages.
+
+- Subscribe (webcal): `webcal://343max.github.io/class-schedule-ical/calendar.ics`
+- Subscribe (https): `https://343max.github.io/class-schedule-ical/calendar.ics`
+
+The landing page at `https://343max.github.io/class-schedule-ical/` explains how
+to subscribe in Apple Calendar and Google Calendar.
+
+One-time setup: GitHub repo → **Settings → Pages → Source → GitHub Actions**.
+GitHub Pages requires a public repository (this repo is public). Calendar apps
+refresh URL subscriptions on their own schedule (Google can lag up to a day), so
+changes are not instant.
