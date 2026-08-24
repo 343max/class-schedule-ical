@@ -35,6 +35,20 @@ uv run python -m class_schedule_ical --preview  # print the schedule to the term
 
 Validation failures are hard errors with a non-zero exit code.
 
+## Web preview
+
+A small Flask server (`server.py`) parses `output/calendar.ics` with `icalendar`,
+expands the weekly recurrences with `dateutil.rrule`, and renders a browser UI:
+
+```sh
+uv run python server.py                # then open http://127.0.0.1:8000
+uv run python server.py --port 9000    # or a different port
+```
+
+- Left column: a scrollable list of weeks (Monday–Friday).
+- Right: the selected week as a Mon–Fri grid, with holidays/breaks already
+  excluded.
+
 ## Directory layout
 
 ```
