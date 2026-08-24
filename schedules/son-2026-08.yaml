@@ -33,26 +33,26 @@ days:
   monday:
     - { subject: Enr }
     - { subject: Dalton }
-    - { subject: Musik }
-    - { subject: Deutsch }
+    - { subject: Musik, room: "A301" }
+    - { subject: Deutsch, room: "A309" }
   tuesday:
-    - { subject: GeWi }
+    - { subject: GeWi, room: "A309" }
     - { subject: Dalton }
-    - { subject: NaWi }
-    - { subject: Mathe }
-    - { subject: Sport }
+    - { subject: NaWi, room: "A207" }
+    - { subject: Mathe, room: "A309" }
+    - { subject: Sport, room: "TH1" }
   wednesday:
     - { subject: Dalton }
-    - { subject: NaWi }
-    - { subject: Klassenstunde }
-    - { subject: Eng }
+    - { subject: NaWi, room: "A309" }
+    - { subject: Klassenstunde, room: "A309" }
+    - { subject: Eng, room: "A309" }
   thursday:
-    - { subject: Deutsch }
+    - { subject: Deutsch, room: "A309" }
     - { subject: Dalton }
-    - { subject: Englisch }
-    - { subject: ITG }
+    - { subject: Englisch, room: "A309" }
+    - { subject: ITG, room: "A-115" }
   friday:
-    - { subject: Mathe }
+    - { subject: Mathe, room: "A309" }
     - { subject: Dalton }
-    - { subject: Sport }
+    - { subject: Sport, room: "TH1" }
     - { subject: Enrichment }
