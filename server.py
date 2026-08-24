@@ -2,7 +2,7 @@
 
 Parses output/calendar.ics with `icalendar`, expands the weekly recurrences with
 `dateutil.rrule`, and serves a small UI: a scrollable week picker on the left and
-the Monday-Friday schedule on the right.
+a Monday-Friday timeline on the right (proportional to clock time).
 """
 
 from __future__ import annotations
@@ -36,27 +36,49 @@ INDEX_HTML = """<!DOCTYPE html>
   .week.active { background: #cfe3ff; font-weight: 600; }
   #main { flex: 1; overflow-y: auto; padding: 20px; }
   #weekTitle { margin: 0 0 16px; font-size: 18px; }
-  .grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
-  .day { border: 1px solid #e2e2e2; border-radius: 8px; padding: 10px; min-height: 240px; background: #fff; }
-  .day h3 { margin: 0 0 10px; text-align: center; font-size: 14px; color: #333; }
-  .event { background: #eef2ff; border-radius: 6px; padding: 7px 9px; margin-bottom: 7px; }
-  .event .time { color: #666; font-size: 11px; }
-  .event .subject { font-weight: 600; font-size: 13px; }
-  .event .room { color: #888; font-size: 12px; }
-  .empty { color: #bbb; text-align: center; margin-top: 40px; font-size: 12px; }
+  .timetable { border-collapse: collapse; width: 100%; table-layout: fixed; }
+  .timetable th {
+    height: 30px; background: #fafafa; border: 1px solid #e2e2e2;
+    font-size: 13px; color: #333; font-weight: 600;
+  }
+  .timetable th.gutter { width: 52px; border: none; background: none; }
+  .timetable td { border: 1px solid #f0f0f0; }
+  .timetable tr { height: 6px; }   /* one row = 5 minutes = 6px, identical on every day */
+  .timetable td.gutter {
+    width: 52px; font-size: 10px; color: #999; text-align: right;
+    padding: 0 6px 0 0; vertical-align: top; border: none;
+  }
+  .timetable tr.hour td.slot { border-top: 1px solid #d8d8d8; }
+  .timetable td.event {
+    background: #eef2ff; box-shadow: inset 3px 0 0 #8aa4ff;
+    vertical-align: top; padding: 3px 6px; overflow: hidden;
+  }
+  .event .time { color: #666; font-size: 10px; white-space: nowrap; }
+  .event .subject { font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .event .room { color: #888; font-size: 11px; white-space: nowrap; }
 </style>
 </head>
 <body>
   <div id="sidebar"><h2>Weeks</h2></div>
   <div id="main">
     <h1 id="weekTitle"></h1>
-    <div class="grid" id="grid"></div>
+    <div id="grid"></div>
   </div>
 <script>
 const DAYS = ['monday','tuesday','wednesday','thursday','friday'];
+const ROW_MIN = 5;   // one table row = 5 minutes -> identical height on every day
+let META = { min: '08:00', max: '14:30' };
 const sidebar = document.getElementById('sidebar');
 const grid = document.getElementById('grid');
 const weekTitle = document.getElementById('weekTitle');
+
+function toMin(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
+function pad2(n) { return String(n).padStart(2, '0'); }
+function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+async function loadMeta() {
+  META = await (await fetch('/api/meta')).json();
+}
 
 async function loadWeeks() {
   const weeks = await (await fetch('/api/weeks')).json();
@@ -83,36 +105,71 @@ async function selectWeek(w, el) {
 
 function render(events) {
   grid.innerHTML = '';
+  const minMin = toMin(META.min), maxMin = toMin(META.max);
+  const totalRows = (maxMin - minMin) / ROW_MIN;
+
+  const cells = {};
   for (const day of DAYS) {
-    const col = document.createElement('div');
-    col.className = 'day';
-    const h = document.createElement('h3');
-    h.textContent = day[0].toUpperCase() + day.slice(1);
-    col.appendChild(h);
-    const evs = events.filter(e => e.day === day).sort((a, b) => a.start.localeCompare(b.start));
-    if (!evs.length) {
-      const empty = document.createElement('div');
-      empty.className = 'empty';
-      empty.textContent = 'no classes';
-      col.appendChild(empty);
-    }
-    for (const e of evs) {
-      const d = document.createElement('div');
-      d.className = 'event';
-      d.innerHTML = `<div class="time">${e.start} – ${e.end}</div>` +
-                    `<div class="subject">${esc(e.summary)}</div>` +
-                    (e.location ? `<div class="room">${esc(e.location)}</div>` : '');
-      col.appendChild(d);
-    }
-    grid.appendChild(col);
+    cells[day] = events.filter(e => e.day === day)
+      .sort((a, b) => a.start.localeCompare(b.start))
+      .map(e => ({
+        row: (toMin(e.start) - minMin) / ROW_MIN,
+        span: (toMin(e.end) - toMin(e.start)) / ROW_MIN,
+        e
+      }));
   }
+
+  const table = document.createElement('table');
+  table.className = 'timetable';
+  const thead = document.createElement('thead');
+  const htr = document.createElement('tr');
+  const gth = document.createElement('th');
+  gth.className = 'gutter';
+  htr.appendChild(gth);
+  for (const day of DAYS) {
+    const th = document.createElement('th');
+    th.textContent = day[0].toUpperCase() + day.slice(1);
+    htr.appendChild(th);
+  }
+  thead.appendChild(htr);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  for (let r = 0; r < totalRows; r++) {
+    const tr = document.createElement('tr');
+    if (r % 12 === 0) tr.className = 'hour';
+    const gtd = document.createElement('td');
+    gtd.className = 'gutter';
+    if (r % 12 === 0) {
+      gtd.textContent = `${pad2(Math.floor((minMin + r * ROW_MIN) / 60))}:00`;
+    }
+    tr.appendChild(gtd);
+    for (const day of DAYS) {
+      const cell = cells[day].find(c => c.row === r);
+      if (cell) {
+        const td = document.createElement('td');
+        td.className = 'event';
+        td.rowSpan = cell.span;
+        td.innerHTML = `<div class="time">${cell.e.start} – ${cell.e.end}</div>` +
+                       `<div class="subject">${esc(cell.e.summary)}</div>` +
+                       (cell.e.location ? `<div class="room">${esc(cell.e.location)}</div>` : '');
+        tr.appendChild(td);
+      } else {
+        const covered = cells[day].some(c => r > c.row && r < c.row + c.span);
+        if (!covered) {
+          const td = document.createElement('td');
+          td.className = 'slot';
+          tr.appendChild(td);
+        }
+      }
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  grid.appendChild(table);
 }
 
-function esc(s) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-loadWeeks();
+loadMeta().then(loadWeeks);
 </script>
 </body>
 </html>
@@ -207,14 +264,35 @@ def events_in_range(events: list[dict], start: date, end: date) -> list[dict]:
     return result
 
 
+def time_bounds(events: list[dict]) -> dict:
+    lo = 24 * 60
+    hi = 0
+    for e in events:
+        for dt in (e["dtstart"], e["dtend"]):
+            m = dt.hour * 60 + dt.minute
+            lo = min(lo, m)
+            hi = max(hi, m)
+    lo = (lo // 30) * 30
+    hi = ((hi + 29) // 30) * 30
+    return {
+        "min": f"{lo // 60:02d}:{lo % 60:02d}",
+        "max": f"{hi // 60:02d}:{hi % 60:02d}",
+    }
+
+
 def create_app(ics_path: Path) -> Flask:
     app = Flask(__name__)
     events = parse_events(ics_path)
     weeks = compute_weeks(events)
+    bounds = time_bounds(events)
 
     @app.route("/")
     def index():
         return INDEX_HTML
+
+    @app.route("/api/meta")
+    def api_meta():
+        return jsonify(bounds)
 
     @app.route("/api/weeks")
     def api_weeks():
