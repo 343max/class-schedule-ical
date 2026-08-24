@@ -22,10 +22,10 @@ def format_preview(schedules: list[Schedule]) -> str:
             out.append("")
             out.append(weekday.capitalize())
             for cls, slot in zip(classes, slots):
-                room = cls.room or ""
+                room = f"  {cls.room}" if cls.room else ""
                 out.append(
                     f"  {slot.start:%H:%M}–{slot.end:%H:%M}   "
-                    f"{cls.subject:<{max_subject}}  {room}"
+                    f"{cls.subject:<{max_subject}}{room}"
                 )
         if s.exceptions:
             out.append("")

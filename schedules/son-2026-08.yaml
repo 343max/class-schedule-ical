@@ -3,52 +3,56 @@ start: 2026-08-17
 end: 2026-09-20
 
 times:
+  - weekdays: [thursday, friday]
+    slots:
+      - { start: "08:00", end: "09:30" }   # 1-2
+      - { start: "09:55", end: "10:40" }   # 3
+      - { start: "10:45", end: "12:15" }   # 4-5
+      - { start: "12:55", end: "14:25" }   # 6-7
   - weekdays: [monday]
     slots:
-      - { start: "08:00", end: "09:30" }
-      - { start: "09:55", end: "10:40" }
-      - { start: "10:45", end: "12:15" }
-  - weekdays: [tuesday, thursday]
+      - { start: "08:00", end: "09:30" }   # 1-2
+      - { start: "09:55", end: "10:40" }   # 3
+      - { start: "10:45", end: "12:15" }   # 4-5
+      - { start: "12:55", end: "13:40" }   # 6
+  - weekdays: [tuesday]
     slots:
-      - { start: "08:00", end: "09:30" }
-      - { start: "09:55", end: "10:40" }
-      - { start: "10:45", end: "12:15" }
-      - { start: "12:55", end: "14:25" }
+      - { start: "08:00", end: "09:30" }   # 1-2
+      - { start: "09:55", end: "10:40" }   # 3
+      - { start: "10:45", end: "12:15" }   # 4-5
+      - { start: "12:55", end: "13:40" }   # 6
+      - { start: "13:40", end: "14:25" }   # 7
   - weekdays: [wednesday]
     slots:
-      - { start: "08:00", end: "09:30" }
-      - { start: "09:55", end: "10:40" }
-      - { start: "10:45", end: "11:30" }
-      - { start: "11:30", end: "12:15" }
-      - { start: "12:55", end: "14:25" }
-  - weekdays: [friday]
-    slots:
-      - { start: "09:55", end: "10:40" }
-      - { start: "10:45", end: "12:15" }
-      - { start: "12:55", end: "14:25" }
+      - { start: "09:55", end: "10:40" }   # 3
+      - { start: "10:45", end: "11:30" }   # 4
+      - { start: "12:05", end: "12:50" }   # 5 (special Wednesday time)
+      - { start: "12:55", end: "14:25" }   # 6-7
 
 days:
   monday:
-    - { subject: NaWi, room: "A207" }
-    - { subject: "DAL 5b", room: "A309" }
-    - { subject: "ENR (NH)", room: "A313" }
+    - { subject: Enr }
+    - { subject: Dalton }
+    - { subject: Musik }
+    - { subject: Deutsch }
   tuesday:
-    - { subject: DE, room: "A309" }
-    - { subject: "DAL 5b", room: "A309" }
-    - { subject: Sport, room: "TH1" }
-    - { subject: MU, room: "A301" }
+    - { subject: GeWi }
+    - { subject: Dalton }
+    - { subject: NaWi }
+    - { subject: Mathe }
+    - { subject: Sport }
   wednesday:
-    - { subject: "ENR (NH)", room: "A313" }
-    - { subject: "DAL 5b", room: "A309" }
-    - { subject: MA, room: "A309" }
-    - { subject: KStd, room: "A309" }
-    - { subject: Kunst, room: "A109" }
+    - { subject: Dalton }
+    - { subject: NaWi }
+    - { subject: Klassenstunde }
+    - { subject: Eng }
   thursday:
-    - { subject: GeWi, room: "A309" }
-    - { subject: "DAL 5b", room: "A309" }
-    - { subject: MA, room: "A309" }
-    - { subject: E, room: "A309" }
+    - { subject: Deutsch }
+    - { subject: Dalton }
+    - { subject: Englisch }
+    - { subject: ITG }
   friday:
-    - { subject: "DAL 5b", room: "A309" }
-    - { subject: E, room: "A309" }
-    - { subject: DE, room: "A309" }
+    - { subject: Mathe }
+    - { subject: Dalton }
+    - { subject: Sport }
+    - { subject: Enrichment }
