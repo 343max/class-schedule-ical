@@ -31,7 +31,7 @@ times:
 
 days:
   monday:
-    - { subject: Enrichment }
+    - { subject: Enrichment, room: "A306" }
     - { subject: Dalton }
     - { subject: Musik, room: "A301" }
     - { subject: Deutsch, room: "A309" }
@@ -55,4 +55,4 @@ days:
     - { subject: Mathe, room: "A309" }
     - { subject: Dalton }
     - { subject: Sport, room: "TH1" }
-    - { subject: Enrichment }
+    - { subject: Enrichment, room: "A306" }
