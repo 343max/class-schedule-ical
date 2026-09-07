@@ -1,0 +1,62 @@
+# Class 6b — new timetable from 2026-09-07 (Tue/Wed now start with 2nd lesson)
+start: 2026-09-07
+end: 2027-01-29
+
+times:
+  - weekdays: [monday]
+    slots:
+      - { start: "08:00", end: "09:30" } # 1-2
+      - { start: "09:55", end: "10:40" } # 3
+      - { start: "10:45", end: "12:15" } # 4-5
+      - { start: "12:55", end: "13:40" } # 6
+  - weekdays: [thursday, friday]
+    slots:
+      - { start: "08:00", end: "09:30" } # 1-2
+      - { start: "09:55", end: "10:40" } # 3
+      - { start: "10:45", end: "12:15" } # 4-5
+      - { start: "12:55", end: "14:25" } # 6-7
+  - weekdays: [tuesday]
+    slots:
+      - { start: "08:45", end: "09:30" } # 2 (no 1st lesson)
+      - { start: "09:55", end: "10:40" } # 3
+      - { start: "10:45", end: "12:15" } # 4-5
+      - { start: "12:55", end: "13:40" } # 6
+      - { start: "13:40", end: "14:25" } # 7
+  - weekdays: [wednesday]
+    slots:
+      - { start: "08:45", end: "09:30" } # 2 (no 1st lesson)
+      - { start: "09:55", end: "10:40" } # 3
+      - { start: "10:45", end: "11:30" } # 4
+      - { start: "12:05", end: "12:50" } # 5 (special Wednesday time)
+      - { start: "12:55", end: "13:40" } # 6
+      - { start: "13:40", end: "14:25" } # 7
+
+days:
+  monday:                                  # unchanged from previous timetable
+    - { subject: Enrichment, room: "A306" }
+    - { subject: Dalton }
+    - { subject: Musik, room: "A301" }
+    - { subject: Deutsch, room: "A309" }
+  tuesday:                                 # starts with 2nd lesson
+    - { subject: English, room: "A309" }  # 2. Stunde
+    - { subject: Dalton }                  # 3.
+    - { subject: NaWi, room: "A207" }      # 4.-5. (2 hours)
+    - { subject: GeWi, room: "A309" }      # 6.
+    - { subject: Sport, room: "TH1" }      # 7.
+  wednesday:                               # also starts with 2nd lesson
+    - { subject: GeWi, room: "A309" }      # 2. Stunde
+    - { subject: Dalton }                  # 3.
+    - { subject: NaWi, room: "A309" }      # 4.
+    - { subject: Klassenstunde, room: "A309" } # 5. (special Wednesday time)
+    - { subject: Mathe, room: "A309" }     # 6.
+    - { subject: English, room: "A309" }   # 7.
+  thursday:                                # unchanged from previous timetable
+    - { subject: Deutsch, room: "A309" }
+    - { subject: Dalton }
+    - { subject: English, room: "A309" }
+    - { subject: ITG, room: "A-115" }
+  friday:                                  # unchanged from previous timetable
+    - { subject: Mathe, room: "A309" }
+    - { subject: Dalton }
+    - { subject: Sport, room: "TH1" }
+    - { subject: Enrichment, room: "A306" }

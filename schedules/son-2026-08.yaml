@@ -1,6 +1,7 @@
-# Class 5b — first semester 2026/27
+# Class 6b — previous timetable (start of school year, until 2026-09-04)
+# Superseded by ab-2026-09-07.yaml from Monday 2026-09-07.
 start: 2026-08-24
-end: 2027-01-29
+end: 2026-09-04
 
 times:
   - weekdays: [thursday, friday]
